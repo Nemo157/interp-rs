@@ -1,0 +1,11 @@
+[package]
+authors = ["Wim Looman <wim@nemo157.com>"]
+name = "interp"
+version = "0.1.0"
+
+[workspace]
+members = ["interp-macros"]
+
+[dependencies]
+take = "0.1.0"
+interp-macros = { path = "interp-macros" }
