@@ -5,9 +5,10 @@ version = "0.1.0"
 
 [dependencies]
 nom = "3.0.0"
-quick-error = "1.2.0"
-quote = "0.3.15"
-syn = "0.11.11"
+quick-error = "1.2.1"
+quote = "0.4.2"
+syn = "0.12.12"
+proc-macro2 = { version = "0.2.2", features = ["nightly"] }
 
 [lib]
 proc-macro = true

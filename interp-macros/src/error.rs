@@ -6,7 +6,7 @@ quick_error! {
         TODO(err: &'static str) {
             description(&err)
         }
-        Syn(err: String) { description(&err) }
+        Syn(err: ::syn::synom::ParseError) { from() }
         Lex(err: ::proc_macro::LexError) { from() }
         Nom(err: ::nom::Err<u32>) {
             from()

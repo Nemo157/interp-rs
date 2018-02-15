@@ -1,7 +1,11 @@
 use quote::{Tokens, ToTokens};
+use syn::Expr;
+use proc_macro2::Span;
 
-use dissect::{Context, Fragment, Interpolation};
-use error::{Error, Result};
+use dissect::{Context, Fragment};
+use error::Result;
+
+struct I<'a>(&'a Expr);
 
 pub fn expand(context: &Context) -> Result<Tokens> {
     let fragments = &context.fragments;
@@ -15,19 +19,25 @@ pub fn expand(context: &Context) -> Result<Tokens> {
     } })
 }
 
-impl<'a> ToTokens for Fragment<'a> {
+impl<'a> ToTokens for I<'a> {
     fn to_tokens(&self, tokens: &mut Tokens) {
-        tokens.append(match *self {
-            Fragment::String(ref s) => quote!(write!(w, #s)?;),
-            Fragment::Interpolation(ref i) => quote!(write!(w, "{}", #i)?;),
-        })
+        tokens.append_all(self.0.into_tokens().into_iter().map(|mut t| {
+            t.span = Span::call_site();
+            t
+        }));
     }
 }
 
-impl<'a> ToTokens for Interpolation<'a> {
+impl ToTokens for Fragment {
     fn to_tokens(&self, tokens: &mut Tokens) {
-        tokens.append("{");
-        tokens.append(self.0);
-        tokens.append("}");
+        match *self {
+            Fragment::String(ref s) => {
+                quote!(write!(w, #s)?;).to_tokens(tokens);
+            }
+            Fragment::Interpolation(ref e) => {
+                let e = I(e);
+                quote!(write!(w, "{}", #e)?;).to_tokens(tokens);
+            }
+        }
     }
 }

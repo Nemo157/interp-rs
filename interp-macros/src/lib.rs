@@ -4,6 +4,7 @@
 #[macro_use] extern crate quick_error;
 #[macro_use] extern crate quote;
 extern crate proc_macro;
+extern crate proc_macro2;
 extern crate syn;
 
 mod dissect;
@@ -16,11 +17,14 @@ use error::{Error, Result};
 
 #[proc_macro]
 pub fn interp(input: TokenStream) -> TokenStream {
-    fn inner(input: String) -> Result<TokenStream> {
-        let tokens = syn::parse_token_trees(&input).map_err(Error::Syn)?;
-        let context = dissect::dissect(&tokens)?;
+    fn inner(input: TokenStream) -> Result<TokenStream> {
+        let string: syn::LitStr = syn::parse(input).map_err(Error::Syn)?;
+        let string = string.value();
+        let context = dissect::dissect(&string)?;
         let expanded = expand::expand(&context)?;
-        Ok(expanded.parse()?)
+        println!("expanded: {:#?}", expanded);
+        println!("expanded stream: {:#?}", proc_macro2::TokenStream::from(expanded.clone()));
+        Ok(expanded.into())
     }
-    inner(input.to_string()).expect("Error expanding macro")
+    inner(input).expect("Error expanding macro")
 }
