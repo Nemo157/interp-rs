@@ -4,11 +4,11 @@ name = "interp-macros"
 version = "0.1.0"
 
 [dependencies]
-nom = "3.0.0"
-quick-error = "1.2.1"
-quote = "0.4.2"
-syn = "0.12.12"
-proc-macro2 = { version = "0.2.2", features = ["nightly"] }
+nom = "4.1.1"
+quick-error = "1.2.2"
+quote = "0.6.9"
+syn = "0.15.18"
+proc-macro2 = { version = "0.4.20", features = ["nightly"] }
 
 [lib]
 proc-macro = true
