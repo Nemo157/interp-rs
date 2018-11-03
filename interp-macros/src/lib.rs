@@ -1,9 +1,6 @@
-#[macro_use] extern crate nom;
-#[macro_use] extern crate quick_error;
-#[macro_use] extern crate quote;
+#![feature(extern_crate_item_prelude)]
+
 extern crate proc_macro;
-extern crate proc_macro2;
-extern crate syn;
 
 mod dissect;
 mod error;
@@ -11,7 +8,7 @@ mod expand;
 
 use proc_macro::TokenStream;
 
-use error::{Error, Result};
+use crate::error::{Error, Result};
 
 #[proc_macro]
 pub fn interp(input: TokenStream) -> TokenStream {

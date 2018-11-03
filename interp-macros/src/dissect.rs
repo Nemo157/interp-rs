@@ -1,8 +1,12 @@
 use std::str;
 
 use syn::{self, Expr};
+use nom::{named, map, delimited, many1, alt_complete, take_until_s, tag_s, take_while_s};
 
-use error::Result;
+// TODO: Internals of nom, should open an issue about not needing these
+use nom::{tuple_parser, call, error_position, complete, tag, take_until, alt, take_while};
+
+use crate::error::Result;
 
 type NStr<'a> = nom::types::CompleteStr<'a>;
 

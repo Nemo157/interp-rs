@@ -1,9 +1,10 @@
 use quote::{ToTokens, TokenStreamExt};
 use syn::Expr;
 use proc_macro2::{Span, TokenStream};
+use quote::quote;
 
-use dissect::{Context, Fragment};
-use error::Result;
+use crate::dissect::{Context, Fragment};
+use crate::error::Result;
 
 struct I<'a>(&'a Expr);
 
