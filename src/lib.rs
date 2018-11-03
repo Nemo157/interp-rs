@@ -3,7 +3,7 @@
 //! ## Hello World!
 //!
 //! ```rust
-//! #![feature(proc_macro_non_items)]
+//! #![feature(proc_macro_hygiene)]
 //! use interp::interp;
 //! let who = "World";
 //! assert_eq!(interp!("Hello { who }!").to_string(), "Hello World!");
