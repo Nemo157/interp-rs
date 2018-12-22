@@ -1,7 +1,8 @@
 use std::str;
 
-use syn::{self, Expr};
+use syn::{self, Expr, LitStr};
 use nom::{named, map, delimited, many1, alt_complete, take_until_s, tag_s, take_while_s};
+use proc_macro2::Span;
 
 // TODO: Internals of nom, should open an issue about not needing these
 use nom::{tuple_parser, call, error_position, complete, tag, take_until, alt, take_while};
@@ -31,7 +32,7 @@ named!(code<NStr, IFragment>, map!(take_until_s!("}"), IFragment::Interpolation)
 named!(interpolation<NStr, IFragment>, delimited!(tag_s!("{"), code, tag_s!("}")));
 named!(interpolate<NStr, Vec<IFragment>>, many1!(alt_complete!(interpolation | map!(take_while_s!(a), IFragment::String))));
 
-pub fn dissect(string: &str) -> Result<Context> {
+pub fn dissect(string: &str, span: Span) -> Result<Context> {
     let string = nom::types::CompleteStr(string);
     let (unparsed, parsed) = interpolate(string)?;
     println!("unparsed: {:?}", unparsed);
@@ -40,7 +41,7 @@ pub fn dissect(string: &str) -> Result<Context> {
 
     let fragments = parsed.into_iter().map(|f| Ok(match f {
         IFragment::String(s) => Fragment::String(s.as_ref().to_owned()),
-        IFragment::Interpolation(s) => Fragment::Interpolation(syn::parse_str(s.as_ref())?),
+        IFragment::Interpolation(s) => Fragment::Interpolation(LitStr::new(s.as_ref(), span).parse()?),
     })).collect::<Result<Vec<Fragment>>>().unwrap();
     Ok(Context { fragments: fragments })
 }

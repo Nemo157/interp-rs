@@ -10,3 +10,4 @@ members = ["interp-macros"]
 [dependencies]
 take = "0.1.0"
 interp-macros = { path = "interp-macros" }
+proc-macro-hack = "0.5"
