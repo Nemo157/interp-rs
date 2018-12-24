@@ -9,7 +9,8 @@ nom = "4.1.1"
 quick-error = "1.2.2"
 quote = "0.6.9"
 syn = "0.15.18"
-proc-macro2 = { version = "0.4.20", features = ["nightly"] }
+proc-macro2 = { version = "0.4.20" }
+proc-macro-hack = "0.5"
 
 [lib]
 proc-macro = true
