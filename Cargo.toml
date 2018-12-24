@@ -3,6 +3,7 @@ authors = ["Wim Looman <wim@nemo157.com>"]
 name = "interp"
 version = "0.1.0"
 edition = "2018"
+license = "MIT OR Apache-2.0"
 
 [workspace]
 members = ["interp-macros"]
